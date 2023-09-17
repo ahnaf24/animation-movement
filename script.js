@@ -4,26 +4,44 @@ const canvas =document.getElementById('canvas1');
 const ctx = canvas.getContext('2d');
 CANVAS_WIDTH =canvas.width = 500;
 CANVAS_HEIGHT = canvas.height = 1000;
+const numberOfEmemies = 100;
+const enemiesArray = [];    
+
+const enemyImage = new Image();
+enemyImage.src = 'enemy1.png';
 
 class Enemy {
     constructor(){
-        this.x = 10;
-        this.y = 50;
-        this.width = 200;
-        this.height = 200;
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.speed = Math.random() * 4 -2;
+        this.spriteWidth = 293;
+        this.spriteHeight = 155;
+        this.width = this.spriteWidth / 3;
+        this.height = this.spriteHeight /3;
     }
     update(){
-        this.x++;
-        this.y++;
+        this.x += this.speed;
+        this.y += this.speed;
     }
+    draw(){
+        ctx.strokeRect(this.x, this.y, this.width, this.height)
+        ctx.drawImage(enemyImage, 0, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height);
+    }
+};
+
+for(let i = 0; i < numberOfEmemies; i++){
+   enemiesArray.push(new Enemy());
 }
 
-const enemy1 = new Enemy();
 
 function animate() {
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    enemy1.update();
-    ctx.fillRect(enemy1.x, enemy1.y, enemy1.width, enemy1.height);
+   
+    enemiesArray.forEach(enemy => {
+        enemy.update();
+        enemy.draw();
+    });
     requestAnimationFrame(animate);
 };
 animate();
